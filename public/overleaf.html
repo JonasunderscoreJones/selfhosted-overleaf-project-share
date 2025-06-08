@@ -328,6 +328,10 @@
       let newEditorWidth = e.clientX - containerRect.left - sidebarWidth;
       newEditorWidth = Math.max(200, Math.min(newEditorWidth, availableWidth - 200));
 
+      if (availableWidth - newEditorWidth < 415) {
+        newEditorWidth = availableWidth - 415;
+      }
+
       editorEl.style.flex = "none";
       previewContainerEl.style.flex = "none";
 
