@@ -17,7 +17,7 @@ def create_symlink_to_dir(symlink_target, link_path):
         if os.path.islink(link_path) or os.path.exists(link_path):
             print(f"Path '{link_path}' already exists.")
             return
-
+        os.makedirs(os.path.dirname(link_path), exist_ok=True)
         os.symlink(symlink_target, link_path)
         print(f"Symlink created: {link_path} -> {symlink_target}")
     except OSError as e:
@@ -31,6 +31,11 @@ def get_project_directory(project_id):
             return None
         # Find the symlink directory that starts with the project_id
         symlink_dirs = [d for d in os.listdir(SYMLINK_DIR) if os.path.isdir(os.path.join(SYMLINK_DIR, d))]
+        # Sort by last modified time (descending)
+        symlink_dirs.sort(
+            key=lambda d: os.path.getmtime(os.path.join(SYMLINK_DIR, d)),
+            reverse=True
+        )
         for symlink_dir in symlink_dirs:
             if symlink_dir == project_id or symlink_dir.startswith(project_id + "-"):
                 symlink_dir = os.path.join(SYMLINK_DIR, symlink_dir)
