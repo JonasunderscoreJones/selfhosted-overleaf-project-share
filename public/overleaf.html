@@ -22,6 +22,7 @@
     header {
       height: 40px;
       background: #1b222c;
+      color: #afb5c0;
       padding: 0 1rem;
       display: flex;
       align-items: center;
@@ -40,7 +41,7 @@
 
     .sidebar {
       width: 200px;
-      background: #252525;
+      background: #495365;
       border-right: 1px solid #444;
       overflow-y: auto;
       flex-shrink: 0;
@@ -51,20 +52,19 @@
     }
 
     .sidebar li {
-      padding: 0.75rem 1rem;
+      padding: 0.25rem 1rem;
       cursor: pointer;
-      border-bottom: 1px solid #333;
       display: flex;
       align-items: center;
       transition: background-color 0.2s ease;
     }
 
     .sidebar li:hover {
-      background: #3a3a3a;
+      background: #098842;
     }
 
     .sidebar li.active {
-      background: #4a90e2;
+      background: #098842;
       color: white;
     }
 
@@ -72,7 +72,6 @@
       flex: 2;
       background: #1e1e1e;
       overflow: auto;
-      padding: 1rem;
       font-size: 14px;
       min-width: 200px;
       user-select: text;
@@ -155,10 +154,14 @@
       font-size: 14px;
       cursor: pointer;
     }
+    #open-in-editor-button:hover {
+      background-color: #1e6941;
+      transition: background-color 0.2s ease;
+    }
   </style>
 </head>
 <body>
-  <header>Project Viewer (Read-only)<a id="open-in-editor-button">Open in Editor</a></header>
+  <header><a id="header-content"><a>LaTeX Project Viewer (Read-only) -</a><a id="project-id" style="margin-left: 3px;"></a><a id="open-in-editor-button">Open in Editor</a></a></header>
   <main>
     <nav class="sidebar">
       <ul id="file-list"></ul>
@@ -194,6 +197,9 @@
     document.getElementById("open-in-editor-button").onclick = () => {
       window.open(`https://tex.jonasjones.dev/project/${projectId}`, "_blank");
     };
+
+    // Set project ID in header
+    document.getElementById("project-id").textContent = projectId;
 
     async function listFiles() {
       try {
