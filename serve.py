@@ -15,8 +15,8 @@ STATIC_SHARE_RESTRICTION = True  # Toggle restriction on/off
 def create_symlink_to_dir(symlink_target, link_path):
     try:
         if os.path.islink(link_path) or os.path.exists(link_path):
-            print(f"Path '{link_path}' already exists.")
-            return
+            os.remove(link_path)
+        # Ensure the parent directory exists
         os.makedirs(os.path.dirname(link_path), exist_ok=True)
         os.symlink(symlink_target, link_path)
         print(f"Symlink created: {link_path} -> {symlink_target}")
