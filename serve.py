@@ -31,7 +31,7 @@ def get_project_directory(project_id):
     if GRAB_SYMLINKS and not os.path.exists(project_dir):
         # If the project does not exist in the projects dir, check if it exists in the symlinks dir
         if not os.path.exists(SYMLINK_DIR) or not os.path.isdir(SYMLINK_DIR):
-            return ""
+            return None
         # Find the symlink directory that starts with the project_id
         symlink_dirs = [d for d in os.listdir(SYMLINK_DIR) if os.path.isdir(os.path.join(SYMLINK_DIR, d))]
         # Sort by last modified time (descending)
@@ -56,6 +56,8 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             project_id = parts[0]
             project_dir = get_project_directory(project_id)
 
+            if not project_dir:
+                return os.path.join(BASE_DIR, "404.html")
             # Check .staticshare restriction
             if STATIC_SHARE_RESTRICTION:
                 staticshare_path = os.path.join(project_dir, ".staticshare")
@@ -87,6 +89,14 @@ class CustomHandler(http.server.SimpleHTTPRequestHandler):
             project_id = parts[0]
 
             project_dir = get_project_directory(project_id)
+
+            if not project_dir:
+                self.send_response(404)
+                self.send_header("Content-type", "text/html")
+                self.end_headers()
+                with open(os.path.join(BASE_DIR, "404.html"), "rb") as f:
+                    self.wfile.write(f.read())
+                return
 
             if STATIC_SHARE_RESTRICTION:
                 staticshare_path = os.path.join(project_dir, ".staticshare")
