@@ -1,2 +1,3 @@
 public/projects/*
 __pycache__/
+.env

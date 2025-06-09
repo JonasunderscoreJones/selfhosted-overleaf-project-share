@@ -5,12 +5,15 @@ from urllib.parse import unquote
 import io
 import zipfile
 from datetime import datetime
+from dotenv import load_dotenv
 
-PORT = 8000
+load_dotenv()
+
+PORT = int(os.getenv("PORT", 8000))  # Default port is 8000 if not set
 BASE_DIR = os.path.abspath("public")
-GRAB_SYMLINKS = True  # Toggle symlink handling on/off
-SYMLINK_DIR = os.path.abspath("symlinks")  # Directory to resolve symlinks to
-STATIC_SHARE_RESTRICTION = True  # Toggle restriction on/off
+GRAB_SYMLINKS = os.getenv("GRAB_SYMLINKS", "true").lower() == "true"  # Toggle symlink grabbing
+SYMLINK_DIR = os.getenv("SYMLINK_DIR", "symlinks")  # Directory where symlinks are stored
+STATIC_SHARE_RESTRICTION = os.getenv("STATIC_SHARE_RESTRICTION", "true").lower() == "true"  # Restrict access to .staticshare
 
 def create_symlink_to_dir(symlink_target, link_path):
     try:
